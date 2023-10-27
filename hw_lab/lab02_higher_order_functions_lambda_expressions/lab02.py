@@ -130,3 +130,12 @@ def cycle(f1, f2, f3):
     19
     """
     "*** YOUR CODE HERE ***"
+    def g(n):
+        def h(x):
+            for i in range(1, n + 1):
+                if i % 3 == 1: x = f1(x)
+                if i % 3 == 2: x = f2(x)
+                if i % 3 == 0: x = f3(x)
+            return x
+        return h
+    return g
