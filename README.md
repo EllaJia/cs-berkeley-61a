@@ -8,6 +8,7 @@ This repo contains the study materials for UC Berkeley's cs61a course, serving a
 - hw
 - lab
 - dis
+- lectures
 
 ## Resources
 #### Course Website
