@@ -25,7 +25,12 @@ def num_eights(n):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    if n == 0:
+        return 0
+    elif n % 10 == 8:
+        return 1 + num_eights(n // 10)
+    else:
+        return num_eights(n // 10)
 
 def digit_distance(n):
     """Determines the digit distance of n.
@@ -47,6 +52,11 @@ def digit_distance(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    n_last, n_last_but_one, n_remain = n % 10, (n // 10) % 10, n // 10
+    if n_remain == 0:
+        return 0
+    else:
+        return abs(n_last - n_last_but_one) + digit_distance(n // 10)
 
 
 def interleaved_sum(n, odd_term, even_term):
@@ -69,6 +79,20 @@ def interleaved_sum(n, odd_term, even_term):
     True
     """
     "*** YOUR CODE HERE ***"
+    # if n == 1:
+    #     return odd_term(1)
+    # elif n % 2:
+    #     return odd_term(n) + interleaved_sum(n - 1, odd_term, even_term)
+    # else:
+    #     return even_term(n) + interleaved_sum(n - 1, odd_term, even_term)
+    
+    # The following is based on the provided solution
+    def interleaved_helper(k, func1, func2):
+        if k == n:
+            return func1(k)
+        else:
+            return func1(k) + interleaved_helper(k + 1, func2, func1)
+    return interleaved_helper(1, odd_term, even_term)
 
 
 def next_larger_coin(coin):
@@ -123,8 +147,19 @@ def count_coins(total):
     True
     """
     "*** YOUR CODE HERE ***"
-
-
+    def count_coins_helper(curr_largest_coin, balance):
+        if curr_largest_coin > balance and curr_largest_coin > 1:
+            return count_coins_helper(next_smaller_coin(curr_largest_coin), balance)
+        elif balance - curr_largest_coin < 0:
+            return 1
+        elif curr_largest_coin == 1:
+            return 1
+        else:
+            with_largest_coin = count_coins_helper(curr_largest_coin, balance - curr_largest_coin)
+            without_largest_coin = count_coins_helper(next_smaller_coin(curr_largest_coin), balance)
+            return with_largest_coin + without_largest_coin
+    return count_coins_helper(25, total)
+        
 def print_move(origin, destination):
     """Print instructions to move a disk."""
     print("Move the top disk from rod", origin, "to rod", destination)
