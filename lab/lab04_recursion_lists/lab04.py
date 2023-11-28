@@ -13,7 +13,7 @@ def my_map(fn, seq):
     2023
     [None, None, None]
     """
-    return ______
+    return [fn(x) for x in seq]
 
 def my_filter(pred, seq):
     """Keeps elements in seq only if they satisfy pred.
@@ -31,7 +31,7 @@ def my_filter(pred, seq):
     >>> my_filter(lambda x: max(5, x) == 5, [1, 2, 3, 4, 5, 6, 7])
     [1, 2, 3, 4, 5]
     """
-    return ______
+    return [x for x in seq if pred(x)]
 
 def my_reduce(combiner, seq):
     """Combines elements in seq using combiner.
@@ -46,6 +46,11 @@ def my_reduce(combiner, seq):
     11
     """
     "*** YOUR CODE HERE ***"
+    total = seq[0]
+    for elem in seq[1:]:
+        total = combiner(total, elem)
+    return total
+        
 
 def my_map_syntax_check():
     """Check that your two_of_three code consists of nothing but a return statement.
@@ -90,6 +95,17 @@ def double_eights(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    def helper(status, result):
+        n_last, n_remain = result % 10, result // 10
+        if result == 0:
+            return False
+        elif n_last == 8 and status == True:
+            return True
+        elif n_last == 8 and status == False:
+            return helper(True, n_remain)
+        else:
+            return helper(False, n_remain)
+    return helper(False, n)
 
 
 def merge(lst1, lst2):
@@ -117,6 +133,18 @@ def merge(lst1, lst2):
     True
     """
     "*** YOUR CODE HERE ***"
+    def helper(pt1, pt2, new_lst):
+        if pt1 >= len(lst1):
+            return new_lst + lst2[pt2:]
+        elif pt2 >= len(lst2):
+            return new_lst + lst1[pt1:]
+        elif lst1[pt1] > lst2[pt2]:
+            new_lst = new_lst + [lst2[pt2]]
+            return helper(pt1, pt2 + 1, new_lst)
+        else:
+            new_lst = new_lst + [lst1[pt1]]
+            return helper(pt1 + 1, pt2, new_lst)
+    return helper(0, 0, [])
 
 
 def summation(n, term):
@@ -138,6 +166,10 @@ def summation(n, term):
     """
     assert n >= 1
     "*** YOUR CODE HERE ***"
+    if n == 1:
+        return term(1)
+    else:
+        return term(n) + summation(n-1, term)
 
 
 def count_palindromes(L):
@@ -147,5 +179,15 @@ def count_palindromes(L):
     >>> count_palindromes(("Acme", "Madam", "Pivot", "Pip"))
     2
     """
-    return ______
+    
+    """
+
+    filter(function, iterable) is equivalent to the generator expression (item for item in iterable if function(item)) if function is not None 
+    
+        iterable may be either a sequence, a container which supports iteration, or an iterator.
+    
+    and (item for item in iterable if item) if function is None.
+    
+    """
+    return len(list(filter(lambda s: s.lower() == s[::-1].lower(), L)))
 
