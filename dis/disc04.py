@@ -150,3 +150,26 @@ def flatten(s):
         return flatten(s[0]) + flatten(s[1:])
     else:
         return [s[0]] + flatten(s[1:])
+
+# another solution
+# def flatten(s):
+#     """Returns a flattened version of list s.
+
+#     >>> flatten([1, 2, 3])
+#     [1, 2, 3]
+#     >>> deep = [1, [[2], 3], 4, [5, 6]]
+#     >>> flatten(deep)
+#     [1, 2, 3, 4, 5, 6]
+#     >>> deep                                # input list is unchanged
+#     [1, [[2], 3], 4, [5, 6]]
+#     >>> very_deep = [['m', ['i', ['n', ['m', 'e', ['w', 't', ['a'], 't', 'i', 'o'], 'n']], 's']]]
+#     >>> flatten(very_deep)
+#     ['m', 'i', 'n', 'm', 'e', 'w', 't', 'a', 't', 'i', 'o', 'n', 's']
+#     """
+#     lst = []
+#     for elem in s:
+#         if type(elem) == list:
+#             lst += flatten(elem)
+#         else:
+#             lst += [elem]
+#     return lst 
