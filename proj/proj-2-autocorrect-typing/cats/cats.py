@@ -193,32 +193,40 @@ def minimum_mewtations(typed, source, limit):
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    assert False, 'Remove this line'
-    if ___________: # Base cases should go here, you may add more base cases as needed.
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
-    # Recursive cases should go below here
-    if ___________: # Feel free to remove or add additional cases
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
-    else:
-        add = ... # Fill in these lines
-        remove = ...
-        substitute = ...
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
+    if typed == source:
+        return 0
+    if limit == 0:
+        return 1
+    if min(len(typed), len(source)) == 0: 
+        return max(len(typed), len(source))
+    
+    diff = typed[0] != source[0]
+    add_diff = 1 + minimum_mewtations(typed, source[1:], limit-1)
+    remove_diff = 1 + minimum_mewtations(typed[1:], source, limit-1)
+    substitute_diff = diff + minimum_mewtations(typed[1:], source[1:], limit-diff)
+    
+    return min(add_diff, remove_diff, substitute_diff)
 
 
 def final_diff(typed, source, limit):
     """A diff function that takes in a string TYPED, a string SOURCE, and a number LIMIT.
     If you implement this function, it will be used."""
-    assert False, 'Remove this line to use your final_diff function.'
+    if typed == source:
+        return 0
+    if limit == 0:
+        return 1
+    if min(len(typed), len(source)) == 0: 
+        return max(len(typed), len(source))
+    
+    diff = typed[0] != source[0]
+    add_diff = 1 + minimum_mewtations(typed, source[1:], limit-1)
+    remove_diff = 1 + minimum_mewtations(typed[1:], source, limit-1)
+    substitute_diff = diff + minimum_mewtations(typed[1:], source[1:], limit-diff)
+    
+    return min(add_diff, remove_diff, substitute_diff)
+    # This problem hasn not yet been finished
 
 FINAL_DIFF_LIMIT = 6 # REPLACE THIS WITH YOUR LIMIT
-
 
 ###########
 # Phase 3 #
@@ -250,6 +258,21 @@ def report_progress(typed, source, user_id, upload):
     """
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
+    count = 0
+    if len(typed) == 0: 
+        upload({'id': user_id, 'progress': 0.0})
+        return 0.0
+    
+    for i in range(len(typed)):
+        if typed[i] == source[i]:
+            count += 1
+        else:
+            break
+    
+    progress = count / len(source)
+    
+    upload({'id': user_id, 'progress': progress})
+    return progress
     # END PROBLEM 8
 
 
@@ -272,6 +295,10 @@ def time_per_word(words, timestamps_per_player):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    time_diff = []
+    for timestamp in timestamps_per_player:
+        time_diff.append(list(timestamp[i+1] - timestamp[i] for i in range(len(timestamp) - 1)))
+    return match(words, time_diff)
     # END PROBLEM 9
 
 
@@ -294,6 +321,20 @@ def fastest_words(match):
     word_indices = range(len(get_all_words(match)))    # contains an *index* for each word
     # BEGIN PROBLEM 10
     "*** YOUR CODE HERE ***"
+    result = [[False for _ in word_indices] for _ in player_indices]
+
+    for i in word_indices:
+        min_value = float('inf')
+        min_indices = 0
+        for j in player_indices:
+            if time(match, j, i) < min_value:
+                min_value = time(match, j, i)
+                min_indices = j
+        result[min_indices][i] = True
+    
+    result_list = [[get_all_words(match)[i] for i, is_included in enumerate(bools) if is_included] for bools in result]
+
+    return result_list
     # END PROBLEM 10
 
 
