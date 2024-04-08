@@ -126,7 +126,15 @@ def autocorrect(typed_word, word_list, diff_function, limit):
     'testing'
     """
     # BEGIN PROBLEM 5
-    "*** YOUR CODE HERE ***"
+    "*** YOUR CODE HERE ***"    
+    if typed_word in word_list:
+        return typed_word
+    # Create dictionary with keys as iterables in word_list list
+    # and values as difference between them and typed_word
+    d = {v : diff_function(typed_word, v, limit) for v in word_list}
+    
+    # Review question: how to get the smallest value from a dictionary
+    return min(d, key=d.get) if min(d.values()) <= limit else typed_word
     # END PROBLEM 5
 
 
@@ -152,8 +160,16 @@ def feline_fixes(typed, source, limit):
     >>> feline_fixes("rose", "hello", big_limit)   # Substitute: r->h, o->e, s->l, e->l, length difference of 1.
     5
     """
-    # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    # BEGIN PROBLEM 6    
+    if typed == source:
+        return 0
+    if limit == 0:
+        return 1
+    if min(len(typed), len(source)) == 0: 
+        return max(len(typed), len(source))
+
+    diff = typed[0] != source[0]
+    return diff + feline_fixes(typed[1:], source[1:], limit - diff)
     # END PROBLEM 6
 
 
