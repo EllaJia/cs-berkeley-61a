@@ -56,27 +56,26 @@ def replace_loki_at_leaf(t, lokis_replacement):
     True
     """
     "*** YOUR CODE HERE ***"
-    # if is_leaf(t):
-    #     if label(t) == 'loki':
-    #         return tree(lokis_replacement)
-    #     else:
-    #         return tree(label(t))
-    # else:
-    #     # return tree(label(t), [replace_loki_at_leaf(b, lokis_replacement) for b in branches(t)])
-    #     for b in branches(t):
-    #         return tree(label(t), [replace_loki_at_leaf(b, lokis_replacement)])
-    
     if is_leaf(t):
         if label(t) == 'loki':
             return tree(lokis_replacement)
         else:
             return tree(label(t))
     else:
-        new_branches = []  # Create an empty list to store the modified branches
-        for b in branches(t):  # Loop through each branch
-            new_branch = replace_loki_at_leaf(b, lokis_replacement)  # Recursively modify the branch
-            new_branches.append(new_branch)  # Append the modified branch to the list
-        return tree(label(t), new_branches)
+        return tree(label(t), [replace_loki_at_leaf(b, lokis_replacement) for b in branches(t)])
+    
+    # Alternative method
+    # if is_leaf(t):
+    #     if label(t) == 'loki':
+    #         return tree(lokis_replacement)
+    #     else:
+    #         return tree(label(t))
+    # else:
+    #     new_branches = []  # Create an empty list to store the modified branches
+    #     for b in branches(t):  # Loop through each branch
+    #         new_branch = replace_loki_at_leaf(b, lokis_replacement)  # Recursively modify the branch
+    #         new_branches.append(new_branch)  # Append the modified branch to the list
+    #     return tree(label(t), new_branches)
 
 # Tree ADT
 
@@ -174,6 +173,7 @@ def distance(city_a, city_b):
     5.0
     """
     "*** YOUR CODE HERE ***"
+    return sqrt((get_lat(city_a) - get_lat(city_b))**2 + (get_lon(city_a) - get_lon(city_b))**2)
 
 def closer_city(lat, lon, city_a, city_b):
     """
@@ -191,6 +191,11 @@ def closer_city(lat, lon, city_a, city_b):
     'Bucharest'
     """
     "*** YOUR CODE HERE ***"
+    city_c = make_city('city_c', lat, lon)
+    if distance(city_a, city_c) < distance(city_b, city_c):
+        return get_name(city_a)
+    else:
+        return get_name(city_b)
 
 def check_city_abstraction():
     """
@@ -277,6 +282,15 @@ def dejavu(t, n):
     False
     """
     "*** YOUR CODE HERE ***"
+    if is_leaf(t):
+        if n == label(t):
+            return True
+    else:
+        for b in branches(t):
+            if dejavu(b, n - label(t)):
+                return True
+    
+    return False
 
 
 def hailstone_tree(n, h):
@@ -297,11 +311,15 @@ def hailstone_tree(n, h):
         5
           10
     """
-    if _________________________________:
-        return _________________________________
-    branches = _________________________________
-    if ___________ and ___________ and ___________:
-        branches += _________________________________
+    if h == 0:
+        return tree(n)
+    
+    # this branch will exist whenever
+    branches = [hailstone_tree(n*2, h-1)]
+    
+    # see if the 3n+1 branch will exist
+    if (n-1) % 3 == 0 and (n-1)//3 > 1 and ((n-1) // 3) % 2 != 0:
+        branches += [hailstone_tree((n-1)//3, h-1)]
     return tree(n, branches)
 
 
