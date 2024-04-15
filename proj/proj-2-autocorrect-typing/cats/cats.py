@@ -31,15 +31,8 @@ def pick(paragraphs, select, k):
     """
     # BEGIN PROBLEM 1
     "*** YOUR CODE HERE ***"
-    selected_paragraphs = []
-    for i in paragraphs:
-        if select(i):
-            selected_paragraphs.append(i)
-    
-    if k < len(selected_paragraphs):
-        return selected_paragraphs[k]
-    else:
-        return ''
+    selected_paragraphs = [i for i in paragraphs if select(i)]
+    return selected_paragraphs[k] if k + 1 <= len(selected_paragraphs) else ''
     # END PROBLEM 1
 
 
